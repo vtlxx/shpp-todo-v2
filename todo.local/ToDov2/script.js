@@ -60,7 +60,6 @@ let vue = new Vue({
 		getItems: function(){
 			fetch(url + 'getItems.php', {
 				credentials: 'include',
-				mode: 'no-cors',
 			})
 				.then(res => res.json())
 				.then((response) => {
@@ -75,7 +74,6 @@ let vue = new Vue({
 			fetch(url + 'deleteItem.php', {
 				method: 'DELETE',
 				body: request,
-				mode: 'no-cors',
 				credentials: 'include',
 				headers: {
 					'Content-Type': 'application/json;'
@@ -94,11 +92,9 @@ let vue = new Vue({
 			fetch(url + 'addItem.php', {
 				method: 'POST',
 				body: request,
-				mode: 'no-cors',
 				credentials: 'include',
 				headers: {
 					'Content-Type': 'application/json;',
-					'Access-Control-Allow-Origin': url,
 				},
 			}).then(res => res.json())
 				.then((response) => {
@@ -115,7 +111,6 @@ let vue = new Vue({
 			fetch(url + 'changeItem.php', {
 				method: 'PUT',
 				body: request,
-				mode: 'no-cors',
 				credentials: 'include',
 				headers: {
 					'Content-Type': 'application/json;'
@@ -155,7 +150,6 @@ let vue = new Vue({
 		exit(){
 			fetch(url + 'logout.php', {
 				method: 'POST',
-				mode: 'no-cors',
 				credentials: 'include',
 			}).then(res => res.json())
 				.then((response) => {
