@@ -15,9 +15,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     $decoded_json = json_decode(file_get_contents('php://input'), true);
     $text = $decoded_json['text'];
 
-//curl "http://scripts.local/addItem.php" -X OPTIONS -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:105.0) Gecko/20100101 Firefox/105.0" -H "Accept: */*" -H "Accept-Language: ru-RU,ru;q=0.8,en-US;q=0.5,en;q=0.3" -H "Accept-Encoding: gzip, deflate" -H "Access-Control-Request-Method: POST" -H "Access-Control-Request-Headers: content-type" -H "Referer: http://todo.local/" -H "Origin: http://todo.local" -H "Connection: keep-alive"
-//curl "http://scripts.local/addItem.php" -X POST -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:105.0) Gecko/20100101 Firefox/105.0" -H "Accept: */*" -H "Accept-Language: ru-RU,ru;q=0.8,en-US;q=0.5,en;q=0.3" -H "Accept-Encoding: gzip, deflate" -H "Referer: http://todo.local/" -H "Content-Type: application/json;" -H "Origin: http://todo.local" -H "Connection: keep-alive" --data-raw "{""text"":""first""}"
-
     $id = 0;
     if ($text != null) {
         //counting id
