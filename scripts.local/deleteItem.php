@@ -1,5 +1,5 @@
 <?php
-$base_url = 'base.json';
+$base_name = 'todo';
 $http_url = 'http://todo.local';
 
 header('Access-Control-Allow-Origin: ' . $http_url);
@@ -10,19 +10,13 @@ header('Content-Type: application/json');
 
 if($_SERVER['REQUEST_METHOD'] == 'DELETE') {
     $item_id = json_decode(file_get_contents('php://input'), true)['id'];
-    if(file_get_contents($base_url)){
-        $decoded_base = json_decode(file_get_contents($base_url), true);
-        $items = $decoded_base['items'];
 
-
-        //finding and changing value of [$id] item
-        for($i = 0; $i < sizeof($items); $i++){
-            if($items[$i]['id'] == $item_id){
-                array_splice($items, $i, 1);
-            }
-        }
-        $decoded_base['items'] = $items;
-        file_put_contents($base_url, json_encode($decoded_base));
+    $mysql = mysqli_connect('localhost', 'root', '', $base_name);
+    if($mysql) {
+        mysqli_set_charset($mysql, 'utf8');
+        $query = "DELETE FROM items WHERE id = $item_id;";
+        $mysql->query($query);
     }
+
     echo json_encode(array('ok' => true));
 }

@@ -1,5 +1,5 @@
 <?php
-$base_url = 'base.json';
+$base_name = 'todo';
 $http_url = 'http://todo.local';
 
 header('Access-Control-Allow-Origin: ' . $http_url);
@@ -10,20 +10,14 @@ header('Content-Type: application/json');
 
 if($_SERVER['REQUEST_METHOD'] == 'PUT') {
     $item = json_decode(file_get_contents('php://input'), true);
-    if(file_get_contents($base_url)){
-        $decoded_base = json_decode(file_get_contents($base_url), true);
-        $items = $decoded_base['items'];
 
-
-        //finding and changing value of [$id] item
-        for($i = 0; $i < sizeof($items); $i++){
-            if($items[$i]['id'] == $item['id']){
-                $items[$i]['text'] = $item['text'] != '' ? $item['text'] : $items[$i]['text'];
-                $items[$i]['checked'] = ($item['checked'] || $item['checked'] == false) ? $item['checked'] : $items[$i]['checked'];
-            }
-        }
-        $decoded_base['items'] = $items;
-        file_put_contents($base_url, json_encode($decoded_base));
+    $mysql = mysqli_connect('localhost', 'root', '', $base_name);
+    if($mysql) {
+        mysqli_set_charset($mysql, 'utf8');
+        $checked = $item['checked'] ? 'true' : 'false';
+        $query = "UPDATE items SET text = '" . $item['text'] . "', checked = '$checked' WHERE `id` = " . $item['id'] . ";";
+        $mysql->query($query);
     }
+
     echo json_encode(array('ok' => true));
 }
