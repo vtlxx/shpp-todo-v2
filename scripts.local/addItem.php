@@ -1,4 +1,5 @@
 <?php session_start();
+require 'setDB.php';
 $base_name = 'todo';
 $http_url = 'http://todo.local';
 
@@ -20,11 +21,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     if($mysql){
         mysqli_set_charset($mysql, 'utf8');
 
-        $val = $mysql->query('SELECT 1 FROM `items` LIMIT 1');
         //creating table if it does not exist
-        if(!$val) {
-            $query = 'CREATE TABLE items (id INT AUTO_INCREMENT KEY, text VARCHAR(120), checked VARCHAR(6), user_id VARCHAR(20));';
-            $mysql->query($query);
+        if(!$mysql->query('SELECT 1 FROM `items` LIMIT 1')) {
+            create_items();
         }
         file_put_contents('test.txt', session_id());
         //sending request to add item
