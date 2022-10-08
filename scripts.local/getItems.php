@@ -1,4 +1,5 @@
 <?php
+session_start();
 $base_name = 'todo';
 $http_url = 'http://todo.local';
 
@@ -15,7 +16,7 @@ if($mysql){
 
     $val = $mysql->query('SELECT 1 FROM items LIMIT 1');
     if($val) {
-        $result = $mysql->query('SELECT * FROM items ORDER BY id DESC');
+        $result = $mysql->query('SELECT * FROM items WHERE user_id = "'. $_SESSION['login'] . '" ORDER BY id DESC');
         $rows = $result->fetch_all(MYSQLI_ASSOC);
         for($i = 0; $i < sizeof($rows); $i++){
             $rows[$i]['checked'] = $rows[$i]['checked'] == 'true';
