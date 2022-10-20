@@ -22,8 +22,8 @@
     </div>
 </div>
 <script>
-	const url = "http://scripts.local/";
-	const site = "http://todo.local/ToDov2/index.html";
+	const url = "http://scripts.local/Router.php?action=";
+	const site = "http://todo.local/ToDov3/index.html";
 	let vue = new Vue({
 		el: '#app',
 		data: {
@@ -34,28 +34,27 @@
 			login(){
 				if(this.nickName.trim() !== '' && this.pass.trim()) {
 					let request = JSON.stringify({login: this.nickName, pass: this.pass});
-					var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance 
-					xmlhttp.onreadystatechange = function() {
-					    if (this.readyState == 4 && this.status == 200) {
-						let response = JSON.parse(this.response);
-						console.dir(xmlhttp.getResponseHeader('Set-Cookie'));
-						if (response.ok) {
+					fetch(url + 'login', {
+						method: 'POST',
+						body: request,
+						credentials: 'include',
+						headers: {
+							'Content-Type': 'application/json;'
+						},
+					}).then(res => res.json())
+						.then((response) => {
+							if (response.ok) {
 								localStorage.setItem('name', request.login);
 								window.location = site;
 							} else {
 								alert("Error 500. Internal server error. Please try again later")
 							}
-					    }
-					};
-					xmlhttp.open("POST", url + 'login.php');
-					xmlhttp.withCredentials = true;
-					xmlhttp.setRequestHeader("Content-Type", "application/json;");
-					xmlhttp.send(request);
+						});
 				}},
 			register(){
 				if(this.nickName.trim() !== '' && this.pass.trim()) {
 				let request = JSON.stringify({login: this.nickName, pass: this.pass});
-				fetch(url + 'register.php', {
+				fetch(url + 'register', {
 					method: 'POST',
 					body: request,
 					headers: {
@@ -74,11 +73,7 @@
 						}
 					});
 			}},
-		},
-		mounted() {
-
-		},
-	});
+	}});
 </script>
 </body>
 </html>
