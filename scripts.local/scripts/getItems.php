@@ -3,7 +3,6 @@ session_start();
 require 'corsHeaders.php';
 require 'mysqlConfig.php';
 
-$i = 0;
 echo json_encode(array('items' => get_items_from_tasks($_SESSION['login'])));
 
 

@@ -9,7 +9,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     $decoded_query = json_decode(file_get_contents('php://input'), true);
     //checking has login correct
     login($decoded_query['login'], $decoded_query['pass']);
-    file_put_contents('log.txt', session_id());
 }
 
 function login($login, $password){
