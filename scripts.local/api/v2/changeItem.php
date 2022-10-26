@@ -1,6 +1,7 @@
 <?php
 require 'corsHeaders.php';
 require 'mysqlConfig.php';
+require 'errorsController.php';
 
 if($_SERVER['REQUEST_METHOD'] == 'PUT') {
     $item = json_decode(file_get_contents('php://input'), true);
@@ -12,7 +13,10 @@ if($_SERVER['REQUEST_METHOD'] == 'PUT') {
 
 function change_item($checked, $text, $id){
     $mysql = database_connect();
+    //transforming string variable to the boolean
     $checked = $checked ? 'true' : 'false';
-    $query = "UPDATE items SET text = '" . $text . "', checked = '$checked' WHERE `id` = " . $id . ";";
-    $mysql->query($query);
+    //changing variables in the database
+    $stmt = $mysql->prepare('UPDATE items SET text = ?, checked = ? WHERE `id` = ?');
+    $stmt->bind_param('sss', $text, $checked, $id);
+    $stmt->execute();
 }

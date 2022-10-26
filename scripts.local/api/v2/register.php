@@ -2,6 +2,7 @@
 require 'setDB.php';
 require 'corsHeaders.php';
 require 'mysqlConfig.php';
+require 'errorsController.php';
 
 
 
@@ -21,15 +22,18 @@ function register_user($login, $password){
         create_users();
     }
     //checking has the login taken
-    $res = mysqli_fetch_row($mysql->query("SELECT * FROM users WHERE login = \"" . $login . "\";"));
+    $stmt = $mysql->prepare('SELECT * FROM users WHERE login = ?');
+    $stmt->bind_param('s', $login);
+    $stmt->execute();
+    $res = $stmt->get_result()->fetch_row();
     if(isset($res[0])){
-        http_response_code(400);
-        echo json_encode(array('error' => 'login already exists'));
+        outputError(400);
         return false;
     } else{
         //if login is not taken - adding user to the DB
-        $mysql->query('INSERT INTO users SET login = "' . $login
-            . '", password = "' . $password . '"');
+        $stmt = $mysql->prepare('INSERT INTO users SET login = ?, password = ?');
+        $stmt->bind_param('ss', $login, $password);
+        $stmt->execute();
         return true;
     }
 }

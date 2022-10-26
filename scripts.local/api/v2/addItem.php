@@ -18,11 +18,12 @@ function add($text){
     if(!$mysql->query('SELECT 1 FROM `items` LIMIT 1')) {
         create_items();
     }
-    file_put_contents('test.txt', session_id());
     //sending request to add item
-    $query = "INSERT INTO items SET text = \"$text\", checked = \"false\", user_id = \"" . $_SESSION['login'] . "\";";
-    $mysql->query($query);
-    return mysqli_insert_id($mysql);
+    $stmt = $mysql->prepare('INSERT INTO items SET text = ?, checked = ?, user_id = ?');
+    $stmt->bind_param('sss', $text, $isChecked, $_SESSION['login']);
+    $isChecked = 'false';
+    $stmt->execute();
+    return $stmt->insert_id;
 }
 
 

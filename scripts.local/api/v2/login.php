@@ -2,6 +2,7 @@
 session_start();
 require 'corsHeaders.php';
 require 'mysqlConfig.php';
+require  'errorsController.php';
 
 
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -17,16 +18,18 @@ function login($login, $password){
     //if table 'users' exists
     if($val){
         //searching for user with $login and $password
-        $q = mysqli_fetch_row($mysql->query('SELECT COUNT(1) FROM users WHERE login = "' . $login
-            . '" AND password = "' . $password . '";'));
+        $stmt = $mysql->prepare('SELECT COUNT(1) FROM users WHERE login = ? AND password = ?');
+        $stmt->bind_param('ss', $login, $password);
+        $stmt->execute();
+        $q = $stmt->get_result()->fetch_row();
         //if user found - adding his login to the session
         if($q[0]){
             $_SESSION['login'] = $login;
             echo json_encode(array('ok' => true));
         } else{
-            echo json_encode(array('error' => 'incorrect login or password'));
+            outputError(401);
         }
     } else {
-        echo json_encode(array('error' => 'table does not exist'));
+        outputError(500);
     }
 }
