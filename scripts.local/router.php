@@ -1,18 +1,16 @@
 <?php
 $routes = [];
-$scripts_host = '';
-addRoute('addItem', $scripts_host . 'scripts/addItem.php');
-addRoute('getItems', $scripts_host . 'scripts/getItems.php');
-addRoute('changeItem', $scripts_host . 'scripts/changeItem.php');
-addRoute('deleteItem', $scripts_host . 'scripts/deleteItem.php');
-addRoute('login', $scripts_host . 'scripts/login.php');
-addRoute('logout', $scripts_host . 'scripts/logout.php');
-addRoute('register', $scripts_host . 'scripts/register.php');
-addRoute('setDB', $scripts_host . 'scripts/setDB.php');
-addRoute('index', $scripts_host . 'ToDov3/index.html');
+addRoute('addItem', 'api/v2/addItem.php');
+addRoute('getItems', 'api/v2/getItems.php');
+addRoute('changeItem', 'api/v2/changeItem.php');
+addRoute('deleteItem', 'api/v2/deleteItem.php');
+addRoute('login', 'api/v2/login.php');
+addRoute('logout', 'api/v2/logout.php');
+addRoute('register', 'api/v2/register.php');
+addRoute('setDB', 'api/v2/setDB.php');
+addRoute('index', 'api/v2/index.html');
 
 route($_GET['action']);
-//./route.php?action=login     ['login' => 'user', 'pass' = 'pass']
 
 function addRoute($name, $path){
     global $routes;
